@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .forms import UserRegistrationForm, UserLoginForm, EditProfileForm
 from .models import User
 from team_finder.constants import USERS_PER_PAGE
+from team_finder.paginator import get_paginated_page
 
 
 def register_view(request):
@@ -30,13 +31,13 @@ def login_view(request):
     password = form.cleaned_data.get("password")
     user = authenticate(request, email=email, password=password)
 
-    if user is not None:
-        login(request, user)
-        next_url = request.GET.get("next", "projects:project_list")
-        return redirect(next_url)
+    if user is None:
+        form.add_error(None, "Неверный имейл или пароль")
+        return render(request, "users/login.html", {"form": form})
 
-    form.add_error(None, "Неверный имейл или пароль")
-    return render(request, "users/login.html", {"form": form})
+    login(request, user)
+    next_url = request.GET.get("next", "projects:project_list")
+    return redirect(next_url)
 
 
 @login_required
@@ -106,9 +107,7 @@ def user_list(request):
             filter_kwarg = {filter_mapping[active_filter]: filter_values[active_filter]}
             queryset = queryset.filter(**filter_kwarg).distinct()
 
-    paginator = Paginator(queryset, USERS_PER_PAGE)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    page_obj = get_paginated_page(request, queryset, USERS_PER_PAGE)
 
     query_prefix = f"filter={active_filter}&" if active_filter else ""
 

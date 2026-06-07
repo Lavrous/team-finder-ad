@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
+from django.utils import timezone
 
 from team_finder.constants import (
     USER_NAME_MAX_LEN,
@@ -49,6 +50,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, verbose_name="Активный аккаунт")
     is_staff = models.BooleanField(default=False, verbose_name="Доступ к админ-панели")
 
+    date_joined = models.DateTimeField(
+        default=timezone.now, verbose_name="Дата регистрации"
+    )
+
     skills = models.ManyToManyField(
         Skill, blank=True, related_name="users", verbose_name="Навыки"
     )
@@ -67,7 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
-        ordering = ["-id"]
+        ordering = ["-date_joined"]
 
     def save(self, *args, **kwargs):
         if not self.pk and not self.avatar:

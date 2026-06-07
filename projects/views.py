@@ -12,13 +12,12 @@ from team_finder.constants import (
     PROJECT_STATUS_CLOSED,
     PROJECTS_PER_PAGE,
 )
+from team_finder.paginator import get_paginated_page
 
 
 def project_list(request):
     projects = Project.objects.all()
-    paginator = Paginator(projects, PROJECTS_PER_PAGE)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    page_obj = get_paginated_page(request, projects, PROJECTS_PER_PAGE)
 
     context = {
         "projects": page_obj,
@@ -114,12 +113,22 @@ def toggle_participate(request, project_id):
 def complete_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
 
-    if project.owner == request.user and project.status == PROJECT_STATUS_OPEN:
-        project.status = PROJECT_STATUS_CLOSED
-        project.save()
-        return JsonResponse({"status": "ok", "project_status": PROJECT_STATUS_CLOSED})
+    if project.owner != request.user:
+        return JsonResponse(
+            {
+                "status": "error",
+                "message": "Отказано в доступе. Вы не являетесь автором этого проекта.",
+            },
+            status=HTTPStatus.FORBIDDEN,
+        )
 
-    return JsonResponse(
-        {"status": "error", "message": "Отказано в доступе или проект уже закрыт"},
-        status=HTTPStatus.FORBIDDEN,
-    )
+    if project.status != PROJECT_STATUS_OPEN:
+        return JsonResponse(
+            {"status": "error", "message": "Проект уже был завершен ранее."},
+            status=HTTPStatus.BAD_REQUEST,
+        )
+
+    project.status = PROJECT_STATUS_CLOSED
+    project.save()
+
+    return JsonResponse({"status": "ok", "project_status": PROJECT_STATUS_CLOSED})
