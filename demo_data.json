@@ -1,0 +1,102 @@
+[
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$IYye6qOdZGtWgqHhAgUq5A$fPZfN9pEiFYHl7SfUQdRV1cMjOkP3qhsfq0AUNVkMbI=",
+        "last_login": "2026-06-07T10:44:18.343Z",
+        "is_superuser": false,
+        "email": "kasonumonefun@gmail.com",
+        "name": "Максим",
+        "surname": "Марикян",
+        "avatar": "avatars/Михаил_avatar.png",
+        "phone": null,
+        "github_url": null,
+        "about": "",
+        "is_active": true,
+        "is_staff": false,
+        "groups": [],
+        "user_permissions": [],
+        "skills": [],
+        "favorites": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$haBdB144jbaHeQr5LBaKox$Ja3Tqm0jXP4YuT+nrNhkfNPR/mcejHDxewvLNSjScE4=",
+        "last_login": "2026-06-07T10:43:47.023Z",
+        "is_superuser": false,
+        "email": "michaelkhoev@gmail.com",
+        "name": "Михаил",
+        "surname": "Светлаков",
+        "avatar": "avatars/Михаил_avatar_MctX1It.png",
+        "phone": "+79132152623",
+        "github_url": null,
+        "about": "Император галактики",
+        "is_active": true,
+        "is_staff": false,
+        "groups": [],
+        "user_permissions": [],
+        "skills": [],
+        "favorites": [
+            2,
+            1
+        ]
+    }
+},
+{
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$72Hq5LDgwKkaSSFnChQxH4$ekdO1SN4cD1t+QrkL4qbYMnG5p93Wvj8pYWuckpRIhk=",
+        "last_login": "2026-06-07T10:26:00.289Z",
+        "is_superuser": true,
+        "email": "zenakovalenko1@gmail.com",
+        "name": "Евгений",
+        "surname": "Коваленко",
+        "avatar": "avatars/Евгений_avatar.png",
+        "phone": null,
+        "github_url": null,
+        "about": "",
+        "is_active": true,
+        "is_staff": true,
+        "groups": [],
+        "user_permissions": [],
+        "skills": [],
+        "favorites": []
+    }
+},
+{
+    "model": "projects.project",
+    "pk": 1,
+    "fields": {
+        "name": "Fitness трекер с геймификацией FitQuest",
+        "description": "Мобильное приложение для отслеживания физической активности с элементами игры. Пользователи выполняют квесты, зарабатывают очки опыта, прокачивают персонажа и соревнуются с друзьями. Интеграция с Apple Health и Google Fit. Цель — мотивировать людей вести активный образ жизни через игровую механику.",
+        "owner": 2,
+        "created_at": "2026-06-07T07:06:38.488Z",
+        "github_url": "https://github.com/fitquest/mobile-app",
+        "status": "open",
+        "participants": [
+            2
+        ]
+    }
+},
+{
+    "model": "projects.project",
+    "pk": 2,
+    "fields": {
+        "name": "Децентрализованная платформа для фрилансеров Web3Lance",
+        "description": "Создаем блокчейн-платформу для фрилансеров без посредников. Умные контракты автоматически управляют оплатой после подтверждения выполненной работы. Репутация хранится в блокчейне, комиссии минимальны, платежи в криптовалюте. Это будущее фриланса — прозрачное, безопасное и без центрального контроля.",
+        "owner": 1,
+        "created_at": "2026-06-07T10:43:27.489Z",
+        "github_url": "https://github.com/fitquest/mobile-app",
+        "status": "open",
+        "participants": [
+            2,
+            1
+        ]
+    }
+}
+]
