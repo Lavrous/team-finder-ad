@@ -1,8 +1,10 @@
 import re
+
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+
 from .models import Skill
+from team_finder.validators import validate_github_url
 
 User = get_user_model()
 
@@ -34,7 +36,7 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["name", "surname", "avatar", "about", "phone", "github_url"]
+        fields = ["name", "surname", "avatar", "about", "phone", "github_url", "skills"]
 
     def clean_phone(self):
         phone = self.cleaned_data.get("phone")
@@ -58,24 +60,18 @@ class EditProfileForm(forms.ModelForm):
 
     def clean_github_url(self):
         url = self.cleaned_data.get("github_url")
-        if url and "github.com" not in url.lower():
-            raise forms.ValidationError(
-                "Ссылка должна вести именно на Github (github.com)."
-            )
+        validate_github_url(url)
         return url
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        if commit:
-            user.save()
-            skills_str = self.cleaned_data.get("skills", "")
-            if skills_str:
-                skill_names = [s.strip() for s in skills_str.split(",") if s.strip()]
-                skill_objs = []
-                for name in skill_names:
-                    obj, created = Skill.objects.get_or_create(name=name)
-                    skill_objs.append(obj)
-                user.skills.set(skill_objs)
-            else:
-                user.skills.clear()
-        return user
+    def clean_skills(self):
+        skills_str = self.cleaned_data.get("skills", "")
+        if not skills_str:
+            return Skill.objects.none()
+
+        skill_names = [s.strip() for s in skills_str.split(",") if s.strip()]
+        skill_objs = []
+        for name in skill_names:
+            obj, _ = Skill.objects.get_or_create(name=name)
+            skill_objs.append(obj)
+
+        return skill_objs

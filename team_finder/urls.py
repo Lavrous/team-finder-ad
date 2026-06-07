@@ -6,7 +6,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", RedirectView.as_view(url="/project/list/", permanent=True)),
+    path(
+        "", RedirectView.as_view(pattern_name="projects:project_list", permanent=True)
+    ),
     path("users/", include("users.urls")),
     path("projects/", include("projects.urls")),
     path("project/", include("projects.urls")),

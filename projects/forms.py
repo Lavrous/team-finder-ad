@@ -1,5 +1,7 @@
 from django import forms
+
 from .models import Project
+from team_finder.validators import validate_github_url
 
 
 class ProjectForm(forms.ModelForm):
@@ -9,8 +11,5 @@ class ProjectForm(forms.ModelForm):
 
     def clean_github_url(self):
         url = self.cleaned_data.get("github_url")
-        if url and "github.com" not in url.lower():
-            raise forms.ValidationError(
-                "Ссылка должна вести именно на Github (github.com)."
-            )
+        validate_github_url(url)
         return url
